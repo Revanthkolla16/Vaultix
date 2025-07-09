@@ -11,7 +11,7 @@ dotenv.config()
 
 app.use(express.json())
 app.use(cors({
-  origin: "https://vaultix-pi.vercel.app/",
+  origin: "https://vaultix-pi.vercel.app",
   credentials: true
 }))
 
