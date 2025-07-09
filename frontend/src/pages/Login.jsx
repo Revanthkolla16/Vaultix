@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Lock } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
@@ -6,11 +6,27 @@ import { Link, useNavigate } from 'react-router-dom'
 
 const Login = () => {
   const navigate = useNavigate()
+  const [form, setForm] = useState({ email: '', password: '' })
+  const [error, setError] = useState(null)
 
-  const handleSubmit = (e) => {
+  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value })
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // TODO: Add authentication logic here
-    navigate('/dashboard')
+    setError(null)
+    try {
+      const res = await fetch('http://localhost:3000/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form)
+      })
+      if (!res.ok) throw new Error('Invalid credentials')
+      const data = await res.json()
+      localStorage.setItem('token', data.token)
+      navigate('/dashboard')
+    } catch (err) {
+      setError(err.message)
+    }
   }
 
   return (
@@ -28,12 +44,13 @@ const Login = () => {
           <form className="space-y-6" onSubmit={handleSubmit}>
             <div>
               <label className="block text-gray-300 mb-1" htmlFor="email">Email</label>
-              <input id="email" type="email" autoComplete="email" required className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition" />
+              <input id="email" name="email" type="email" autoComplete="email" required className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 transition" value={form.email} onChange={handleChange} />
             </div>
             <div>
               <label className="block text-gray-300 mb-1" htmlFor="password">Password</label>
-              <input id="password" type="password" autoComplete="current-password" required className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-pink-500 transition" />
+              <input id="password" name="password" type="password" autoComplete="current-password" required className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-pink-500 transition" value={form.password} onChange={handleChange} />
             </div>
+            {error && <div className="text-red-400 text-center">{error}</div>}
             <button type="submit" className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-3 rounded-lg transition-all duration-200 shadow-lg hover:shadow-purple-500/25 text-lg mt-2 cursor-pointer">Login</button>
           </form>
           <div className="text-center mt-6">
