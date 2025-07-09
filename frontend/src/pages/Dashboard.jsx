@@ -20,7 +20,7 @@ const Dashboard = () => {
       setLoading(true)
       setError(null)
       try {
-        const res = await fetch('http://localhost:3000/api/passwords', {
+        const res = await fetch('https://vaultix-qs63.onrender.com/api/passwords', {
           headers: { Authorization: `Bearer ${token}` }
         })
         if (!res.ok) throw new Error('Failed to fetch passwords')
@@ -43,7 +43,7 @@ const Dashboard = () => {
     e.preventDefault()
     setError(null)
     try {
-      const res = await fetch('http://localhost:3000/api/passwords', {
+      const res = await fetch('https://vaultix-qs63.onrender.com/api/passwords', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ const Dashboard = () => {
     e.preventDefault()
     setError(null)
     try {
-      const res = await fetch(`http://localhost:3000/api/passwords/${editData._id}`, {
+      const res = await fetch(`https://vaultix-qs63.onrender.com/api/passwords/${editData._id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ const Dashboard = () => {
   const handleDelete = async id => {
     setError(null)
     try {
-      const res = await fetch(`http://localhost:3000/api/passwords/${id}`, {
+      const res = await fetch(`https://vaultix-qs63.onrender.com/api/passwords/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` }
       })
