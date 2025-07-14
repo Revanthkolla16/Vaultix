@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { Lock } from 'lucide-react'
+import Loader from '../components/Loader'
 
 const Dashboard = () => {
   const [passwords, setPasswords] = useState([])
@@ -126,7 +127,7 @@ const Dashboard = () => {
             </div>
             {error && <div className="text-red-400 mb-4">{error}</div>}
             {loading ? (
-              <div className="text-gray-400 text-center py-8">Loading...</div>
+              <div className="flex justify-center py-8"><Loader /></div>
             ) : passwords.length === 0 ? (
               <div className="text-gray-400 text-center py-8">No passwords saved yet. Add your first password!</div>
             ) : (

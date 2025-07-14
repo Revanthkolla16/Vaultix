@@ -3,17 +3,20 @@ import { Lock } from 'lucide-react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { Link, useNavigate } from 'react-router-dom'
+import Loader from '../components/Loader'
 
 const Register = () => {
   const navigate = useNavigate()
   const [form, setForm] = useState({ email: '', password: '' })
   const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value })
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError(null)
+    setLoading(true)
     try {
       const res = await fetch('https://vaultix-qs63.onrender.com/api/auth/register', {
         method: 'POST',
@@ -26,6 +29,8 @@ const Register = () => {
       navigate('/dashboard')
     } catch (err) {
       setError(err.message)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -51,7 +56,9 @@ const Register = () => {
               <input id="password" name="password" type="password" autoComplete="new-password" required className="w-full px-4 py-3 rounded-lg bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-pink-500 transition" value={form.password} onChange={handleChange} />
             </div>
             {error && <div className="text-red-400 text-center">{error}</div>}
-            <button type="submit" className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-3 rounded-lg transition-all duration-200 shadow-lg hover:shadow-purple-500/25 text-lg mt-2 cursor-pointer">Sign Up</button>
+            <button type="submit" className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-3 rounded-lg transition-all duration-200 shadow-lg hover:shadow-purple-500/25 text-lg mt-2 cursor-pointer flex items-center justify-center gap-2" disabled={loading}>
+              {loading ? <Loader /> : 'Sign Up'}
+            </button>
           </form>
           <div className="text-center mt-6">
             <Link to="/login" className="text-purple-400 hover:text-pink-400 transition font-medium">Already have an account? Login</Link>
